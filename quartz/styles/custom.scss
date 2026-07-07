@@ -1,3 +1,14 @@
 @use "./variables.scss" as *;
 
 // put your custom CSS here!
+
+span.internal.internal-link.broken {
+  background-color: var(--highlight);
+  border-radius: 5px;
+  color: var(--secondary);
+  font-weight: 600;
+  line-height: 1.4rem;
+  opacity: 0.5;
+  padding: 0 0.1rem;
+  text-decoration: none;
+}

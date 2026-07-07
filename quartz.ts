@@ -12,8 +12,11 @@ import LocalTagContent from "./components/LocalTagContent"
 import LinksOnlyFooter from "./components/LinksOnlyFooter"
 import PublishedModifiedMeta from "./components/PublishedModifiedMeta"
 import SidebarThemeTweaks from "./components/SidebarThemeTweaks"
+import NoBrokenLinks from "./plugins/NoBrokenLinks"
 
 const config = await loadQuartzConfig()
+config.plugins.transformers.push(NoBrokenLinks())
+
 const layout = await loadQuartzLayout({
   byPageType: {
     content: {
