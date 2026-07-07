@@ -11,6 +11,7 @@ if [ -f "$PROJECT_DIR/.env" ]; then
 fi
 
 ROOT_DIR="${ROOT_DIR:-$PROJECT_DIR}"
+CONTENT_DIR="${CONTENT_DIR:-content}"
 PUBLISH_DIR="${PUBLISH_DIR:-/var/www/muistio-site}"
 PUBLISH_HOST="${PUBLISH_HOST:-}"
 PUBLISH_USER="${PUBLISH_USER:-}"
@@ -19,7 +20,7 @@ PUBLISH_PORT="${PUBLISH_PORT:-22}"
 cd "$ROOT_DIR"
 
 echo "==> Building site"
-node ./quartz/bootstrap-cli.mjs build
+node ./quartz/bootstrap-cli.mjs build -d "$CONTENT_DIR"
 
 if [ ! -d public ]; then
   echo "public/ not found after build."
