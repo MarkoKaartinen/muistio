@@ -1,6 +1,5 @@
 import type { QuartzComponent, QuartzComponentProps } from "../quartz/components/types"
 import type { FullSlug, QuartzPluginData, SortFn } from "@quartz-community/types"
-import { getDate } from "../quartz/components/Date"
 import { isFolderPath, resolveRelative, getAllSegmentPrefixes } from "../quartz/util/path"
 
 type PageEntry = QuartzPluginData & Record<string, unknown>
@@ -10,6 +9,15 @@ type GroupedPageListProps = {
   sort?: SortFn
 } & QuartzComponentProps
 
+function getEntryDate(page: PageEntry): Date | undefined {
+  const preferred = page.defaultDateType
+  if (preferred && page.dates?.[preferred]) {
+    return page.dates[preferred]
+  }
+
+  return page.dates?.created ?? page.dates?.modified ?? page.dates?.published
+}
+
 function byDateAndAlphabeticalFolderFirst(_cfg: unknown): SortFn {
   return (f1, f2) => {
     const f1IsFolder = isFolderPath(f1.slug ?? "")
@@ -18,7 +26,7 @@ function byDateAndAlphabeticalFolderFirst(_cfg: unknown): SortFn {
     if (!f1IsFolder && f2IsFolder) return 1
 
     if (f1.dates && f2.dates) {
-      return (getDate(f2)?.getTime() ?? 0) - (getDate(f1)?.getTime() ?? 0)
+      return (getEntryDate(f2)?.getTime() ?? 0) - (getEntryDate(f1)?.getTime() ?? 0)
     } else if (f1.dates && !f2.dates) {
       return -1
     } else if (!f1.dates && f2.dates) {
@@ -55,7 +63,7 @@ const GroupedPageList: QuartzComponent = ({
 
   const groups = new Map<string, PageEntry[]>()
   for (const page of list) {
-    const pageDate = page.dates ? getDate(page) : undefined
+    const pageDate = page.dates ? getEntryDate(page) : undefined
     const key = pageDate ? formatListDate(pageDate, locale) : "Ei paivaysta"
     if (!groups.has(key)) groups.set(key, [])
     groups.get(key)!.push(page)

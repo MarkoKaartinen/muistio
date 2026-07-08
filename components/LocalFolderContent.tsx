@@ -21,6 +21,18 @@ type TrieNode = {
 
 type PageEntry = QuartzPluginData & Record<string, unknown>
 
+function preferredDateTypeFromEntries(
+  entries: PageEntry[],
+): "created" | "modified" | "published" | undefined {
+  for (const entry of entries) {
+    if (entry.defaultDateType) {
+      return entry.defaultDateType
+    }
+  }
+
+  return undefined
+}
+
 function mostRecentDatesFromEntries(entries: PageEntry[]): PageEntry["dates"] {
   let maybeDates: PageEntry["dates"] | undefined
   for (const entry of entries) {
@@ -51,10 +63,12 @@ function pagesFromTrie(folder: TrieNode): PageEntry[] {
         const childEntries = node.children
           .map((child) => child.data as PageEntry | null)
           .filter((entry): entry is PageEntry => Boolean(entry && entry.unlisted !== true))
+        const defaultDateType = preferredDateTypeFromEntries(childEntries)
 
         return {
           slug: node.slug as FullSlug,
           dates: mostRecentDatesFromEntries(childEntries),
+          ...(defaultDateType ? { defaultDateType } : {}),
           frontmatter: { title: node.displayName, tags: [] },
         }
       }
