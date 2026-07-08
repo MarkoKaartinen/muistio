@@ -31,12 +31,12 @@ if [ -n "$PUBLISH_HOST" ] && [ -n "$PUBLISH_USER" ]; then
   REMOTE_TARGET="${PUBLISH_USER}@${PUBLISH_HOST}:${PUBLISH_DIR}"
 
   echo "==> Publishing public/ to $REMOTE_TARGET"
-  rsync -av --delete -e "ssh -p $PUBLISH_PORT" public/ "$REMOTE_TARGET"/
+  rsync -avc --delete -e "ssh -p $PUBLISH_PORT" public/ "$REMOTE_TARGET"/
 else
   mkdir -p "$PUBLISH_DIR"
 
   echo "==> Publishing public/ to $PUBLISH_DIR"
-  rsync -av --delete public/ "$PUBLISH_DIR"/
+  rsync -avc --delete public/ "$PUBLISH_DIR"/
 fi
 
 echo "==> Deploy finished"
