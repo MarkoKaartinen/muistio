@@ -17,12 +17,8 @@ function formatDisplayDate(date: Date, locale: string) {
   return `${formattedDate} klo ${hour}:${minute}`
 }
 
-function isSameCalendarDate(a: Date, b: Date) {
-  return (
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate()
-  )
+function isSameTimestamp(a: Date, b: Date) {
+  return a.getTime() === b.getTime()
 }
 
 const PublishedModifiedMeta: QuartzComponent = ({
@@ -43,7 +39,7 @@ const PublishedModifiedMeta: QuartzComponent = ({
 
   const locale = cfg.locale ?? "en-US"
   const showModified = Boolean(
-    dates.modified && (!dates.created || !isSameCalendarDate(dates.created, dates.modified)),
+    dates.modified && (!dates.created || !isSameTimestamp(dates.created, dates.modified)),
   )
 
   return (
