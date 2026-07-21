@@ -237,7 +237,12 @@ plugins:
     enabled: false
     options:
       provider: giscus
-      options: {}
+      options:
+        repo: MarkoKaartinen/muistio
+        repoId: R_kgDOTO1iNw
+        category: Kommentit
+        categoryId: DIC_kwDOTO1iN84DBoLa
+        lang: en
     layout:
       position: afterBody
       priority: 10
